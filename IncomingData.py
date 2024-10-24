@@ -21,7 +21,6 @@ for url in URLs:
         part = 'snippet',
         videoId = url,
         maxResults = 100,
-        # order = 'relevance'
     ).execute()
 
     while response:
@@ -35,7 +34,6 @@ for url in URLs:
                 part = 'snippet',
                 videoId = url,
                 maxResults = 100,
-                # order = 'relevance',
                 pageToken = response['nextPageToken']
             ).execute()
         else:
