@@ -1,49 +1,64 @@
 from googleapiclient.discovery import build
 
+with open('ApiKey.txt', encoding='utf-8').read() as api_key:
+    pass
 
-
-api_key = open('ApiKey.txt', encoding='utf-8').read()
-
-result_file = open('result.txt', 'w+', encoding='utf-8')
+with open('result.txt', 'w+', encoding='utf-8') as result_file:
+    pass
 
 youtube = build("YouTube", "v3", developerKey=api_key)
 
-URLs = ['Xd_r2Z03vG8', 'chT-guufvzI', 'buipq8xnxy0']
 
-comments = []
 
-print(''.split())
-total_counter = 1
 
-for url in URLs:
 
-    response = youtube.commentThreads().list(
-        part = 'snippet',
-        videoId = url,
-        maxResults = 100,
-    ).execute()
+class GetData():
+    
+    def __init__(self):
+        self.URLs = ['Xd_r2Z03vG8', 'chT-guufvzI', 'buipq8xnxy0']
+        self.comments = []
 
-    while response:
+    print(''.split())
 
-        for item in response['items']:
-            comment = item['snippet']['topLevelComment']['snippet']['textDisplay']
-            comments.append(comment)
+    def counter(self):
+        self.total_counter = 0
+        self.total_counter += 1
+        return f'{self.total_counter} видео есть нахуй!'
+   
+    def  get_comments(self):
+    
+        for url in self.URLs:
 
-        if 'nextPageToken' in response:
             response = youtube.commentThreads().list(
                 part = 'snippet',
                 videoId = url,
                 maxResults = 100,
-                pageToken = response['nextPageToken']
             ).execute()
-        else:
 
-            break
+            while response:
 
-    print(total_counter, 'видео есть нахуй!')
-    total_counter += 1
+                for item in response['items']:
+                    comment = item['snippet']['topLevelComment']['snippet']['textDisplay']
+                    self.comments.append(comment)
 
-for comment in comments:
-    result_file.write(comment + '\n')
+                if 'nextPageToken' in response:
+                    response = youtube.commentThreads().list(
+                        part = 'snippet',
+                        videoId = url,
+                        maxResults = 100,
+                        pageToken = response['nextPageToken']
+                    ).execute()
+                else:
+
+                    break
+
+            
+
+    
+    
+
+
+for comment in GetData.comments:
+        result_file.write(comment + '\n')
 
 print('end...')
